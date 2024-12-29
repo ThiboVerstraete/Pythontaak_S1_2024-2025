@@ -3,7 +3,7 @@ import sys, sqlite3, random, csv
 class functions():
 	def __init__(self):
 		try:
-			self.db_connection = sqlite3.connect("mijnfavorieten.db")
+			self.db_connection = sqlite3.connect("Database/mijnfavorieten.db")
 			self.db_cursor = self.db_connection.cursor()
 		except Exception as e:
 			print(f"Error making connection to database: {e}")
