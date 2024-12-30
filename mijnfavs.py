@@ -28,7 +28,7 @@ class functions():
 			self.db_cursor.execute(my_query)
 			rows = self.db_cursor.fetchall()
 			randChoice = random.choice(rows)
-			print(randChoice)
+			print(randChoice[0])
 		except Exception as e:
 			print(f"Error fetching random choice: {e}")
 
@@ -82,9 +82,6 @@ class functions():
 
 if __name__ == '__main__':
 	functions = functions()
-
-	print("----------CSV----------")
-	functions.exportToCSV()
 
 	validGeneral = False
 	validDetail = False
