@@ -4,7 +4,7 @@
 This is a project meant for personal use. This project holds a database with some of my favorite videogames and the year I started playing them. I wanted to do it about this topic so i can look back on my favorite games I might have forgotten in the past. There is also a funtion to choose a random game in case I don't know what to play.
 
 **Location of the database**
-Database/Mijnfavorieten.db
+/Database/Mijnfavorieten.db
 
 **Functions**
 ***showAll()***
