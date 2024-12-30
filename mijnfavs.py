@@ -9,18 +9,20 @@ class functions():
 			print(f"Error making connection to database: {e}")
 			sys.exit(-1)
 
-
-	def showall(self):
+	def showAll(self):
 		try:
 			my_query = "SELECT * FROM Mijnfavorietendb"
 			self.db_cursor.execute(my_query)
 			rows = self.db_cursor.fetchall()  # Fetch all rows
+			column_names = [description[0] for description in self.db_cursor.description]
+
+			print(column_names)
 			for row in rows:
 				print(row)
 		except Exception as e:
 			print(f"Error fetching data in showall: {e}")
 
-	def feelrandom(self):
+	def feelRandom(self):
 		try:
 			my_query = "SELECT Name FROM Mijnfavorietendb"
 			self.db_cursor.execute(my_query)
@@ -50,10 +52,10 @@ class functions():
 			print(f"Error changing name: {e}")
 			sys.exit(-1)
 
-	def changeYear(self, name, year, newyear):
+	def changeYear(self, name, newyear):
 		try:
-			my_query = "UPDATE Mijnfavorietendb SET Yearstarted = ? WHERE Yearstarted = ?"
-			self.db_cursor.execute(my_query, (newyear, year))
+			my_query = "UPDATE Mijnfavorietendb SET Yearstarted = ? WHERE Name = ?"
+			self.db_cursor.execute(my_query, (newyear, name))
 			self.db_connection.commit()
 			print("Year succesfully Changed")
 		except Exception as e:
@@ -68,9 +70,6 @@ class functions():
 
 		column_names = [description[0] for description in self.db_cursor.description]
 
-		print(column_names)
-		print(rows)
-
 		try:
 			with open(filename, mode='w') as file:
 				writer = csv.writer(file)
@@ -84,20 +83,51 @@ class functions():
 if __name__ == '__main__':
 	functions = functions()
 
-	print("----------ALL----------")
-	functions.showall()
-	print("----------RANDOM CHOICE----------")
-	functions.feelrandom()
-
 	print("----------CSV----------")
 	functions.exportToCSV()
 
-	"""
-	!!!!WERKT!!!!
-	print("----------ADD----------")
-	functions.addGame("testgame", 2020)
+	validGeneral = False
+	validDetail = False
 
-	print("----------UPDATE----------")
-	functions.changeName('testgame', 'Assetto Corsa')
-	functions.changeYear('Assetto Corsa', 2020, 2018)
-	"""
+	while(validGeneral == False):
+		validGeneral = True
+		choice = input("Options: r (read options), a (add something), u (update options), e (export to csv file): ")
+
+		if(choice == "r"):
+			while(validDetail == False):
+				validDetail = True
+				choice2 = input("a (see all entries), r (Random game): ")
+
+				if(choice2 == "a"):
+					functions.showAll()
+				elif(choice2 == "r"):
+					functions.feelRandom()
+				else:
+					print("Not a valid option")
+					validDetail = False
+
+		elif(choice == "a"):
+			name = input("What is the name of the game?: ")
+			year = input ("What is the year you started playing said game?: ")
+			functions.addGame(name, year)
+		elif(choice == "u"):
+			while(validDetail == False):
+				validDetail = True
+				choice2 = input("n (change name), y (change year): ")
+
+				if(choice2 == "n"):
+					name = input("What is the current name of the game?: ")
+					newname = input ("What is the name you want to change it to?: ")
+					functions.changeName(name, newname)
+				elif(choice2 == "y"):
+					name = input("What is the name of the game?: ")
+					year = input ("What is the year you want to change it to?: ")
+					functions.changeName(name, year)
+				else:
+					print("Not a valid option")
+					validDetail = False
+		elif(choice == "e"):
+			functions.exportToCSV()
+		else:
+			print("Not a valid option")
+			validGeneral = False
